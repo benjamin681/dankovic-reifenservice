@@ -669,9 +669,10 @@ function Shop(){
                       <circle cx="65" cy="65" r="46" fill="#111" stroke={C.white+"08"} strokeWidth="1"/>
                       {/* Rim */}
                       <circle cx="65" cy="65" r={p.cat==="komplett"?42:38} fill="none" stroke={p.cat==="komplett"?"#888":"#333"} strokeWidth={p.cat==="komplett"?3:1}/>
-                      {p.cat==="komplett"&&[0,72,144,216,288].map(deg=>(
-                        <line key={deg} x1="65" y1="65" x2={65+Math.cos(deg*Math.PI/180)*38} y2={65+Math.sin(deg*Math.PI/180)*38} stroke="#777" strokeWidth="2" transform={`rotate(${deg} 65 65)`}/>
-                      ))}
+                      {p.cat==="komplett"&&[0,72,144,216,288].map(deg=>{
+                        const rad=deg*Math.PI/180;
+                        return <line key={deg} x1="65" y1="65" x2={65+Math.cos(rad)*38} y2={65+Math.sin(rad)*38} stroke="#666" strokeWidth="2.5"/>;
+                      })}
                       <circle cx="65" cy="65" r="18" fill="#1A1A1A" stroke={C.white+"10"} strokeWidth="1"/>
                       <circle cx="65" cy="65" r="6" fill="#222" stroke={C.white+"08"} strokeWidth="1"/>
                       {/* 5 bolt holes */}
