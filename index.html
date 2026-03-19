@@ -58,10 +58,6 @@ const IMG = {
   detail: "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=1000&q=80",
   road: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=1400&q=80",
   service: "https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?w=1200&q=80",
-  tireSommer: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800&q=80",
-  tireWinter: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&q=80",
-  tireAll: "https://images.unsplash.com/photo-1625047509248-ec889cbff17f?w=800&q=80",
-  tireKomplett: "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800&q=80",
 };
 
 const C = {
@@ -659,16 +655,41 @@ function Shop(){
                   {p.label&&<div style={{position:"absolute",top:16,right:16,background:C.red,color:C.white,padding:"4px 10px",fontFamily:ff.body,fontSize:9,fontWeight:700,letterSpacing:1.5,textTransform:"uppercase"}}>{p.label}</div>}
 
                   {/* Tire visual */}
-                  <div style={{height:180,display:"flex",alignItems:"center",justifyContent:"center",background:C.bgLight,position:"relative",overflow:"hidden"}}>
-                    <img src={p.cat==="komplett"?IMG.tireKomplett:p.cat==="winter"?IMG.tireWinter:p.cat==="ganzjahr"?IMG.tireAll:IMG.tireSommer} alt={p.name} loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover",display:"block",opacity:0.85,transition:"opacity 0.3s"}}
-                      onMouseEnter={e=>{e.currentTarget.style.opacity=1}}
-                      onMouseLeave={e=>{e.currentTarget.style.opacity=0.85}}
-                    />
+                  <div style={{height:180,display:"flex",alignItems:"center",justifyContent:"center",background:`linear-gradient(135deg, ${C.bgLight} 0%, #0F0F0F 100%)`,position:"relative",overflow:"hidden"}}>
+                    {/* Background pattern */}
+                    <div style={{position:"absolute",inset:0,opacity:0.03,backgroundImage:`repeating-linear-gradient(45deg, ${C.white} 0px, ${C.white} 1px, transparent 1px, transparent 8px)`}}/>
+                    {/* SVG Tire */}
+                    <svg width="130" height="130" viewBox="0 0 130 130" style={{filter:"drop-shadow(0 4px 20px rgba(0,0,0,0.5))"}}>
+                      <circle cx="65" cy="65" r="62" fill="none" stroke={C.white+"15"} strokeWidth="1"/>
+                      <circle cx="65" cy="65" r="58" fill="#1A1A1A" stroke={C.white+"10"} strokeWidth="1"/>
+                      {/* Tread pattern */}
+                      {[0,20,40,60,80,100,120,140,160,180,200,220,240,260,280,300,320,340].map(deg=>(
+                        <rect key={deg} x="63" y="4" width="4" height="12" rx="1" fill={p.cat==="winter"?"#3B82F6":p.cat==="ganzjahr"?"#10B981":p.cat==="komplett"?"#8B5CF6":"#F59E0B"} opacity="0.5" transform={`rotate(${deg} 65 65)`}/>
+                      ))}
+                      <circle cx="65" cy="65" r="46" fill="#111" stroke={C.white+"08"} strokeWidth="1"/>
+                      {/* Rim */}
+                      <circle cx="65" cy="65" r={p.cat==="komplett"?42:38} fill="none" stroke={p.cat==="komplett"?"#888":"#333"} strokeWidth={p.cat==="komplett"?3:1}/>
+                      {p.cat==="komplett"&&[0,72,144,216,288].map(deg=>(
+                        <line key={deg} x1="65" y1="65" x2={65+Math.cos(deg*Math.PI/180)*38} y2={65+Math.sin(deg*Math.PI/180)*38} stroke="#777" strokeWidth="2" transform={`rotate(${deg} 65 65)`}/>
+                      ))}
+                      <circle cx="65" cy="65" r="18" fill="#1A1A1A" stroke={C.white+"10"} strokeWidth="1"/>
+                      <circle cx="65" cy="65" r="6" fill="#222" stroke={C.white+"08"} strokeWidth="1"/>
+                      {/* 5 bolt holes */}
+                      {[0,72,144,216,288].map(deg=>{
+                        const x=65+Math.cos(deg*Math.PI/180)*12;
+                        const y=65+Math.sin(deg*Math.PI/180)*12;
+                        return <circle key={deg} cx={x} cy={y} r="2.5" fill="#222" stroke={C.white+"08"} strokeWidth="0.5"/>;
+                      })}
+                    </svg>
+                    {/* Brand text */}
+                    <div style={{position:"absolute",top:14,left:18,fontFamily:ff.display,fontSize:11,fontWeight:700,color:`${C.white}15`,letterSpacing:3,textTransform:"uppercase"}}>{p.name.split(" ")[0]}</div>
                     {/* Season badge */}
                     <div style={{position:"absolute",bottom:12,left:16,display:"flex",alignItems:"center",gap:6,background:`${C.bg}CC`,padding:"4px 10px",backdropFilter:"blur(8px)"}}>
                       <span style={{width:6,height:6,borderRadius:"50%",background:saisonColor[p.saison]||C.muted}}/>
                       <span style={{fontFamily:ff.body,fontSize:9,fontWeight:600,color:saisonColor[p.saison]||C.muted,letterSpacing:1,textTransform:"uppercase"}}>{p.saison}</span>
                     </div>
+                    {/* Size badge */}
+                    <div style={{position:"absolute",bottom:12,right:16,fontFamily:ff.body,fontSize:10,fontWeight:600,color:`${C.white}30`,letterSpacing:0.5}}>{p.size.split(" ")[0]}</div>
                   </div>
 
                   {/* Info */}
