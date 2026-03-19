@@ -233,10 +233,10 @@ function Home({go}){
               </h2>
             </div>
           </R>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(4, 1fr)",gap:2}} className="grid-4">
+          <div style={{display:"grid",gridTemplateColumns:"repeat(4, 1fr)",gap:2}} className="grid-2">
             {services.map((s,i)=>(
               <R key={i} delay={i*0.08}>
-                <div style={{position:"relative",height:400,overflow:"hidden",className:"service-card",cursor:"default",background:C.bgCard}}
+                <div style={{position:"relative",height:400,overflow:"hidden",cursor:"default",background:C.bgCard}}
                   onMouseEnter={e=>{e.currentTarget.querySelector('.ov').style.opacity="0.5";e.currentTarget.querySelector('.ct').style.transform="translateY(0)";e.currentTarget.querySelector('img').style.transform="scale(1.05)"}}
                   onMouseLeave={e=>{e.currentTarget.querySelector('.ov').style.opacity="0.75";e.currentTarget.querySelector('.ct').style.transform="translateY(8px)";e.currentTarget.querySelector('img').style.transform="scale(1)"}}
                 >
@@ -261,7 +261,7 @@ function Home({go}){
       {/* ROAD INTERLUDE */}
       <PhotoSection className="photo-section" src={IMG.road} alt="Straße" height={380} position="center 60%"
         overlay={`linear-gradient(0deg, ${C.bg}EE 0%, ${C.bg}70 50%, ${C.bg}30 100%)`}>
-        <div style={{maxWidth:1200,margin:"0 auto",padding:"0 40px 48px",width:"100%",className:"pad-mobile",boxSizing:"border-box",display:"flex",justifyContent:"space-between",alignItems:"flex-end",flexWrap:"wrap",gap:32}} className="flex-col-mobile">
+        <div style={{maxWidth:1200,margin:"0 auto",padding:"0 40px 48px",width:"100%",boxSizing:"border-box",display:"flex",justifyContent:"space-between",alignItems:"flex-end",flexWrap:"wrap",gap:32}} className="flex-col-mobile">
           <R>
             <div>
               <h3 style={{fontFamily:ff.display,fontSize:38,fontWeight:700,color:C.white,margin:"0 0 8px",letterSpacing:1,textTransform:"uppercase"}}>
@@ -366,7 +366,7 @@ function Leistungen(){
     <div>
       <PhotoSection className="photo-section" src={IMG.service} alt="Werkstatt" height={380} position="center"
         overlay={`linear-gradient(0deg, ${C.bg}F0 0%, ${C.bg}80 60%, ${C.bg}40 100%)`}>
-        <div style={{maxWidth:1200,margin:"0 auto",padding:"0 40px 48px",width:"100%",className:"pad-mobile",boxSizing:"border-box"}}>
+        <div style={{maxWidth:1200,margin:"0 auto",padding:"0 40px 48px",width:"100%",boxSizing:"border-box"}}>
           <R>
             <div style={{fontFamily:ff.body,fontSize:11,fontWeight:500,letterSpacing:5,textTransform:"uppercase",color:C.red,marginBottom:16,display:"flex",alignItems:"center",gap:14}}>
               <span style={{width:28,height:1.5,background:C.red,display:"inline-block"}}/>Leistungen
@@ -407,7 +407,7 @@ function Ueber(){
     <div>
       <PhotoSection className="photo-section" src={IMG.road} alt="Straße" height={380} position="center 70%"
         overlay={`linear-gradient(0deg, ${C.bg}F0 0%, ${C.bg}80 60%, ${C.bg}40 100%)`}>
-        <div style={{maxWidth:1200,margin:"0 auto",padding:"0 40px 48px",width:"100%",className:"pad-mobile",boxSizing:"border-box"}}>
+        <div style={{maxWidth:1200,margin:"0 auto",padding:"0 40px 48px",width:"100%",boxSizing:"border-box"}}>
           <R>
             <div style={{fontFamily:ff.body,fontSize:11,fontWeight:500,letterSpacing:5,textTransform:"uppercase",color:C.red,marginBottom:16,display:"flex",alignItems:"center",gap:14}}>
               <span style={{width:28,height:1.5,background:C.red,display:"inline-block"}}/>Über Uns
@@ -582,7 +582,7 @@ function Shop(){
       {/* HERO */}
       <PhotoSection className="photo-section" src={IMG.tire} alt="Reifen" height={340} position="center"
         overlay={`linear-gradient(0deg, ${C.bg}F0 0%, ${C.bg}80 60%, ${C.bg}40 100%)`}>
-        <div style={{maxWidth:1200,margin:"0 auto",padding:"0 40px 48px",width:"100%",className:"pad-mobile",boxSizing:"border-box"}}>
+        <div style={{maxWidth:1200,margin:"0 auto",padding:"0 40px 48px",width:"100%",boxSizing:"border-box"}}>
           <R>
             <div style={{fontFamily:ff.body,fontSize:11,fontWeight:500,letterSpacing:5,textTransform:"uppercase",color:C.red,marginBottom:16,display:"flex",alignItems:"center",gap:14}}>
               <span style={{width:28,height:1.5,background:C.red,display:"inline-block"}}/>Reifenshop
@@ -746,7 +746,7 @@ function Shop(){
 function Footer({go}){
   return(
     <footer style={{background:C.dark,borderTop:`1px solid ${C.border}`}}>
-      <div style={{maxWidth:1200,margin:"0 auto",padding:"56px 40px 28px",className:"pad-mobile",display:"grid",gridTemplateColumns:"2fr 1fr 1fr",gap:60}} className="grid-3">
+      <div style={{maxWidth:1200,margin:"0 auto",padding:"56px 40px 28px",display:"grid",gridTemplateColumns:"2fr 1fr 1fr",gap:60}} className="grid-3">
         <div>
           <div style={{display:"flex",alignItems:"baseline",gap:8,marginBottom:16}}>
             <span style={{fontFamily:ff.display,fontSize:22,fontWeight:700,color:C.white,letterSpacing:2,textTransform:"uppercase"}}>Dankovic</span>
