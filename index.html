@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reifen & Teileservice Dankovic — Bachhagel</title>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Barlow:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0A0A0A;overflow-x:hidden}img{max-width:100%}</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+/* ═══════════════════════════════════════════════════════════════
+   REIFEN & TEILESERVICE DANKOVIC — Premium Redesign
+   Design: Industrial Precision · Dark Automotive
+   Bachhagel · Steven Dankovic
+   ═══════════════════════════════════════════════════════════════ */
+
+const IMG = {
+  hero: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1600&q=80",
+  tire: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=1000&q=80",
+  wheel: "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=1000&q=80",
+  oil: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1000&q=80",
+  detail: "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=1000&q=80",
+  road: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=1400&q=80",
+  service: "https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?w=1200&q=80",
+};
+
+const C = {
+  bg: "#0A0A0A", bgCard: "#111111", bgLight: "#181818",
+  border: "#222222", borderLight: "#2A2A2A",
+  red: "#DC2626", redBright: "#EF4444", redGlow: "rgba(220,38,38,0.15)", redSubtle: "rgba(220,38,38,0.06)",
+  white: "#F5F5F5", cream: "#E0E0E0", muted: "#777777", mutedLight: "#999999",
+  dark: "#050505",
+};
+
+const ff = { display: "'Oswald', sans-serif", body: "'Barlow', sans-serif" };
+
+const PHONE = "+4915735172119";
+const BOOKING = "https://www.cal.eu/reifen-teileservice-dankovic";
+
+function useReveal(t=0.1){const r=useRef(null);const[v,s]=useState(false);useEffect(()=>{const el=r.current;if(!el)return;const o=new IntersectionObserver(([e])=>{if(e.isIntersecting){s(true);o.unobserve(el)}},{threshold:t});o.observe(el);return()=>o.disconnect()},[t]);return[r,v]}
+function R({children,delay=0,y=30,style={}}){const[r,v]=useReveal();return<div ref={r}style={{...style,opacity:v?1:0,transform:v?"none":`translateY(${y}px)`,transition:`opacity 0.8s cubic-bezier(0.16,1,0.3,1) ${delay}s, transform 0.8s cubic-bezier(0.16,1,0.3,1) ${delay}s`}}>{children}</div>}
+
+const I=(d,o={})=><svg width={o.s||20} height={o.s||20} viewBox="0 0 24 24" fill={o.f||"none"} stroke={o.c||"currentColor"} strokeWidth={o.w||1.5} strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0}}>{d}</svg>;
+const ic = {
+  pin:I(<><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 01-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0116 0"/><circle cx="12" cy="10" r="3"/></>),
+  phone:I(<path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>),
+  mail:I(<><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 01-2.06 0L2 7"/></>),
+  clock:I(<><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></>),
+  arrow:I(<><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></>),
+  check:I(<path d="M20 6L9 17l-5-5"/>),
+  truck:I(<><path d="M14 18V6a2 2 0 00-2-2H4a2 2 0 00-2 2v11a1 1 0 001 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 001-1v-3.65a1 1 0 00-.22-.624l-3.48-4.35A1 1 0 0017.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></>),
+  shield:I(<><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></>),
+  cal:I(<><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></>),
+};
+
+const grain={position:"absolute",inset:0,pointerEvents:"none",opacity:0.04,backgroundImage:`url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`};
+
+const pages=[{id:"home",l:"Start"},{id:"leistungen",l:"Leistungen"},{id:"ueber",l:"Über Uns"},{id:"kontakt",l:"Kontakt"}];
+
+function PhotoSection({src,alt,height=480,overlay,position="center",children}){
+  return(<section style={{position:"relative",height,overflow:"hidden"}}>
+    <img src={src} alt={alt} loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:position,display:"block"}}/>
+    <div style={{position:"absolute",inset:0,background:overlay||`linear-gradient(0deg, ${C.bg}F0 0%, ${C.bg}80 50%, ${C.bg}30 100%)`}}/>
+    {children&&<div style={{position:"absolute",inset:0,display:"flex",alignItems:"flex-end"}}>{children}</div>}
+  </section>);
+}
+
+/* ═══ NAV ═══ */
+function Nav({active,go}){
+  const[sc,setSc]=useState(false);
+  useEffect(()=>{const f=()=>setSc(window.scrollY>60);window.addEventListener("scroll",f,{passive:true});return()=>window.removeEventListener("scroll",f)},[]);
+  return(
+    <nav style={{position:"fixed",top:0,left:0,right:0,zIndex:100,background:sc?`${C.bg}F0`:"transparent",backdropFilter:sc?"blur(24px) saturate(1.3)":"none",borderBottom:sc?`1px solid ${C.border}`:"1px solid transparent",transition:"all 0.5s cubic-bezier(0.16,1,0.3,1)"}}>
+      <div style={{maxWidth:1200,margin:"0 auto",display:"flex",alignItems:"center",justifyContent:"space-between",height:76,padding:"0 40px"}}>
+        <button onClick={()=>go("home")} style={{background:"none",border:"none",cursor:"pointer",padding:0,display:"flex",alignItems:"baseline",gap:8}}>
+          <span style={{fontFamily:ff.display,fontSize:24,fontWeight:700,color:C.white,letterSpacing:2,textTransform:"uppercase"}}>Dankovic</span>
+          <span style={{width:6,height:6,borderRadius:"50%",background:C.red,display:"inline-block"}}/>
+        </button>
+        <div style={{display:"flex",alignItems:"center",gap:0}}>
+          {pages.map(p=>(
+            <button key={p.id} onClick={()=>go(p.id)} style={{background:"none",border:"none",cursor:"pointer",padding:"12px 20px",fontFamily:ff.body,fontSize:12,fontWeight:active===p.id?600:400,color:active===p.id?C.white:C.muted,letterSpacing:1,transition:"all 0.2s",minHeight:44,textTransform:"uppercase"}}
+              onMouseEnter={e=>{if(active!==p.id)e.currentTarget.style.color=C.cream}}
+              onMouseLeave={e=>{if(active!==p.id)e.currentTarget.style.color=C.muted}}
+            >{p.l}</button>
+          ))}
+          <div style={{width:1,height:20,background:C.border,margin:"0 12px"}}/>
+          <a href={BOOKING} target="_blank" rel="noopener noreferrer" style={{display:"flex",alignItems:"center",gap:8,background:C.red,color:C.white,border:"none",padding:"10px 24px",fontFamily:ff.body,fontSize:11,fontWeight:600,letterSpacing:1.5,textTransform:"uppercase",textDecoration:"none",cursor:"pointer",transition:"all 0.25s",minHeight:44}}
+            onMouseEnter={e=>{e.currentTarget.style.background=C.redBright;e.currentTarget.style.transform="translateY(-1px)"}}
+            onMouseLeave={e=>{e.currentTarget.style.background=C.red;e.currentTarget.style.transform="none"}}
+          >Termin buchen</a>
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+/* ═══ HOME ═══ */
+function Home({go}){
+  const services=[
+    {t:"Reifenservice",s:"Montage · Wechsel · Entsorgung",img:IMG.tire,d:"Von der Montage bis zur Altreifenentsorgung — wir kümmern uns fachgerecht um Ihre Reifen."},
+    {t:"Räder wuchten",s:"Präzision · Balance · Sicherheit",img:IMG.wheel,d:"Moderne Technik sorgt für optimale Balance und sicheres Fahrverhalten."},
+    {t:"Ölwechsel",s:"Schnell · Zuverlässig · Hochwertig",img:IMG.oil,d:"Schnell und zuverlässig mit hochwertigen Produkten. Für die Langlebigkeit Ihres Motors."},
+    {t:"Aufbereitung",s:"Innen · Außen · Wie neu",img:IMG.detail,d:"Wir bringen den Glanz zurück — innen wie außen. Professionelle Fahrzeugpflege."},
+  ];
+
+  return(
+    <div>
+      {/* HERO */}
+      <section style={{position:"relative",height:"100vh",overflow:"hidden"}}>
+        <img src={IMG.hero} alt="Fahrzeug" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center 40%",display:"block"}}/>
+        <div style={{position:"absolute",inset:0,background:`linear-gradient(180deg, ${C.bg}50 0%, ${C.bg}70 40%, ${C.bg}DD 75%, ${C.bg}F8 100%)`}}/>
+        <div style={grain}/>
+
+        {/* Red accent line */}
+        <div style={{position:"absolute",top:0,left:"calc(50% + 300px)",width:2,height:"50%",background:`linear-gradient(180deg, transparent, ${C.red}40, ${C.red}15, transparent)`}}/>
+
+        <div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",justifyContent:"flex-end"}}>
+          <div style={{maxWidth:1200,margin:"0 auto",padding:"0 40px",width:"100%",boxSizing:"border-box"}}>
+            <R delay={0.1}>
+              <div style={{fontFamily:ff.body,fontSize:11,fontWeight:500,letterSpacing:5,textTransform:"uppercase",color:C.red,marginBottom:24,display:"flex",alignItems:"center",gap:14}}>
+                <span style={{width:40,height:1.5,background:C.red,display:"inline-block"}}/>
+                Bachhagel · Hauptstraße 41
+              </div>
+            </R>
+            <R delay={0.2}>
+              <h1 style={{fontFamily:ff.display,fontSize:"clamp(48px, 7vw, 96px)",fontWeight:700,color:C.white,lineHeight:0.95,letterSpacing:2,textTransform:"uppercase",margin:"0 0 0",maxWidth:800}}>
+                Reifen &<br/>Teileservice<br/><span style={{color:C.red}}>Dankovic.</span>
+              </h1>
+            </R>
+            <R delay={0.4}>
+              <p style={{fontFamily:ff.body,fontSize:16,fontWeight:300,color:C.muted,lineHeight:1.85,maxWidth:440,margin:"28px 0 0"}}>
+                Professioneller Reifenservice, Ölwechsel und Fahrzeugaufbereitung. Qualität, faire Preise und Hol&Bringservice.
+              </p>
+            </R>
+            <R delay={0.55}>
+              <div style={{display:"flex",gap:14,margin:"36px 0 0",flexWrap:"wrap"}}>
+                <a href={BOOKING} target="_blank" rel="noopener noreferrer" style={{display:"inline-flex",alignItems:"center",gap:10,background:C.red,color:C.white,border:"none",padding:"16px 36px",fontFamily:ff.body,fontSize:12,fontWeight:600,letterSpacing:1.5,textTransform:"uppercase",textDecoration:"none",cursor:"pointer",transition:"all 0.3s",minHeight:52}}
+                  onMouseEnter={e=>{e.currentTarget.style.background=C.redBright;e.currentTarget.style.transform="translateY(-2px)";e.currentTarget.style.boxShadow=`0 12px 40px ${C.redGlow}`}}
+                  onMouseLeave={e=>{e.currentTarget.style.background=C.red;e.currentTarget.style.transform="none";e.currentTarget.style.boxShadow="none"}}
+                >{ic.cal} Termin buchen</a>
+                <a href={`tel:${PHONE}`} style={{display:"inline-flex",alignItems:"center",gap:8,background:"none",color:C.cream,border:`1px solid ${C.white}18`,padding:"16px 28px",fontFamily:ff.body,fontSize:12,fontWeight:400,letterSpacing:1,textTransform:"uppercase",textDecoration:"none",cursor:"pointer",transition:"all 0.3s",minHeight:52}}
+                  onMouseEnter={e=>{e.currentTarget.style.borderColor=C.red;e.currentTarget.style.color=C.red}}
+                  onMouseLeave={e=>{e.currentTarget.style.borderColor=`${C.white}18`;e.currentTarget.style.color=C.cream}}
+                >{ic.phone} Anrufen</a>
+              </div>
+            </R>
+          </div>
+
+          {/* Stats bar */}
+          <div style={{marginTop:48,borderTop:`1px solid ${C.white}10`,background:`${C.bg}80`,backdropFilter:"blur(16px)"}}>
+            <div style={{maxWidth:1200,margin:"0 auto",padding:"0 40px",display:"grid",gridTemplateColumns:"repeat(4, 1fr)"}}>
+              {[
+                {v:"15+",l:"Jahre Erfahrung"},
+                {v:"300+",l:"Stammkunden"},
+                {v:"1.500",l:"Fahrzeuge / Jahr"},
+                {v:"✓",l:"Hol & Bringservice"},
+              ].map((s,i)=>(
+                <R key={i} delay={0.65+i*0.06}>
+                  <div style={{padding:"20px 0",textAlign:"center",borderRight:i<3?`1px solid ${C.white}08`:"none"}}>
+                    <div style={{fontFamily:ff.display,fontSize:28,fontWeight:700,color:C.white,lineHeight:1,letterSpacing:1}}>{s.v}</div>
+                    <div style={{fontFamily:ff.body,fontSize:10,fontWeight:500,color:C.muted,letterSpacing:2,textTransform:"uppercase",marginTop:5}}>{s.l}</div>
+                  </div>
+                </R>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SERVICES */}
+      <section style={{background:C.bg,position:"relative",padding:"100px 40px"}}>
+        <div style={grain}/>
+        <div style={{maxWidth:1200,margin:"0 auto"}}>
+          <R>
+            <div style={{textAlign:"center",marginBottom:72}}>
+              <div style={{fontFamily:ff.body,fontSize:11,fontWeight:500,letterSpacing:5,textTransform:"uppercase",color:C.red,marginBottom:16}}>Unsere Leistungen</div>
+              <h2 style={{fontFamily:ff.display,fontSize:52,fontWeight:700,color:C.white,lineHeight:1.05,letterSpacing:2,textTransform:"uppercase",margin:0}}>
+                Alles aus einer Hand.
+              </h2>
+            </div>
+          </R>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(4, 1fr)",gap:2}}>
+            {services.map((s,i)=>(
+              <R key={i} delay={i*0.08}>
+                <div style={{position:"relative",height:400,overflow:"hidden",cursor:"default",background:C.bgCard}}
+                  onMouseEnter={e=>{e.currentTarget.querySelector('.ov').style.opacity="0.5";e.currentTarget.querySelector('.ct').style.transform="translateY(0)";e.currentTarget.querySelector('img').style.transform="scale(1.05)"}}
+                  onMouseLeave={e=>{e.currentTarget.querySelector('.ov').style.opacity="0.75";e.currentTarget.querySelector('.ct').style.transform="translateY(8px)";e.currentTarget.querySelector('img').style.transform="scale(1)"}}
+                >
+                  <img src={s.img} alt={s.t} loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover",display:"block",transition:"transform 0.6s ease"}}/>
+                  <div className="ov" style={{position:"absolute",inset:0,background:`linear-gradient(0deg, ${C.bg} 0%, ${C.bg}90 40%, transparent 100%)`,opacity:0.75,transition:"opacity 0.4s"}}/>
+                  {/* Red top accent */}
+                  <div style={{position:"absolute",top:0,left:0,right:0,height:2,background:C.red,opacity:0}}
+                    ref={el=>{if(el)el.parentElement.addEventListener("mouseenter",()=>el.style.opacity=1);el&&el.parentElement.addEventListener("mouseleave",()=>el.style.opacity=0)}}
+                  />
+                  <div className="ct" style={{position:"absolute",bottom:0,left:0,right:0,padding:"28px 24px",transform:"translateY(8px)",transition:"transform 0.4s ease"}}>
+                    <div style={{fontFamily:ff.body,fontSize:9,fontWeight:600,color:C.red,letterSpacing:3,textTransform:"uppercase",marginBottom:8}}>{s.s}</div>
+                    <h3 style={{fontFamily:ff.display,fontSize:26,fontWeight:700,color:C.white,margin:"0 0 8px",letterSpacing:1,textTransform:"uppercase"}}>{s.t}</h3>
+                    <p style={{fontFamily:ff.body,fontSize:12,fontWeight:300,color:C.muted,lineHeight:1.7,margin:0}}>{s.d}</p>
+                  </div>
+                </div>
+              </R>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ROAD INTERLUDE */}
+      <PhotoSection src={IMG.road} alt="Straße" height={380} position="center 60%"
+        overlay={`linear-gradient(0deg, ${C.bg}EE 0%, ${C.bg}70 50%, ${C.bg}30 100%)`}>
+        <div style={{maxWidth:1200,margin:"0 auto",padding:"0 40px 48px",width:"100%",boxSizing:"border-box",display:"flex",justifyContent:"space-between",alignItems:"flex-end",flexWrap:"wrap",gap:32}}>
+          <R>
+            <div>
+              <h3 style={{fontFamily:ff.display,fontSize:38,fontWeight:700,color:C.white,margin:"0 0 8px",letterSpacing:1,textTransform:"uppercase"}}>
+                Hol & <span style={{color:C.red}}>Bringservice.</span>
+              </h3>
+              <p style={{fontFamily:ff.body,fontSize:14,fontWeight:300,color:C.muted,margin:0}}>Wir holen Ihr Fahrzeug ab und bringen es zurück. Bequem und stressfrei.</p>
+            </div>
+          </R>
+          <R delay={0.1}>
+            <a href={BOOKING} target="_blank" rel="noopener noreferrer" style={{display:"inline-flex",alignItems:"center",gap:10,background:C.red,color:C.white,padding:"16px 32px",fontFamily:ff.body,fontSize:12,fontWeight:600,letterSpacing:1.5,textTransform:"uppercase",textDecoration:"none",transition:"all 0.25s",minHeight:52}}
+              onMouseEnter={e=>{e.currentTarget.style.background=C.redBright}}
+              onMouseLeave={e=>{e.currentTarget.style.background=C.red}}
+            >{ic.cal} Jetzt Termin buchen</a>
+          </R>
+        </div>
+      </PhotoSection>
+
+      {/* USPs */}
+      <section style={{background:C.bg,position:"relative"}}>
+        <div style={grain}/>
+        <div style={{maxWidth:1200,margin:"0 auto",padding:"100px 40px"}}>
+          <R>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:80,alignItems:"center"}}>
+              <div>
+                <div style={{fontFamily:ff.body,fontSize:11,fontWeight:500,letterSpacing:5,textTransform:"uppercase",color:C.red,marginBottom:24,display:"flex",alignItems:"center",gap:14}}>
+                  <span style={{width:28,height:1.5,background:C.red,display:"inline-block"}}/>Warum Dankovic
+                </div>
+                <h2 style={{fontFamily:ff.display,fontSize:44,fontWeight:700,color:C.white,lineHeight:1.1,letterSpacing:1,textTransform:"uppercase",margin:"0 0 24px"}}>
+                  Qualität hat<br/>einen <span style={{color:C.red}}>Namen.</span>
+                </h2>
+                <p style={{fontFamily:ff.body,fontSize:15,fontWeight:300,color:C.muted,lineHeight:1.85,margin:"0 0 32px",maxWidth:420}}>
+                  Über 15 Jahre Erfahrung im Fahrzeugservice. Faire Preise, schnelle Arbeit und persönliche Beratung — dafür steht der Name Dankovic.
+                </p>
+                <a href={`tel:${PHONE}`} style={{display:"inline-flex",alignItems:"center",gap:10,background:"none",border:`1px solid ${C.white}15`,color:C.cream,padding:"14px 28px",fontFamily:ff.body,fontSize:12,fontWeight:500,letterSpacing:1,textTransform:"uppercase",textDecoration:"none",transition:"all 0.25s",minHeight:48}}
+                  onMouseEnter={e=>{e.currentTarget.style.borderColor=C.red;e.currentTarget.style.color=C.red}}
+                  onMouseLeave={e=>{e.currentTarget.style.borderColor=`${C.white}15`;e.currentTarget.style.color=C.cream}}
+                >{ic.phone} 0157 35172119</a>
+              </div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:2}}>
+                {[
+                  {icon:ic.shield,t:"Fachgerecht",d:"Professionelle Arbeit mit modernem Equipment."},
+                  {icon:ic.truck,t:"Hol & Bringservice",d:"Wir kommen zu Ihnen — ohne Aufpreis."},
+                  {icon:ic.clock,t:"Schnell & Pünktlich",d:"Termine werden eingehalten. Kein langes Warten."},
+                  {icon:ic.check,t:"Faire Preise",d:"Transparent, ehrlich, ohne versteckte Kosten."},
+                ].map((u,i)=>(
+                  <R key={i} delay={0.1+i*0.08}>
+                    <div style={{background:C.bgCard,padding:"32px 24px",borderTop:`2px solid transparent`,transition:"all 0.3s"}}
+                      onMouseEnter={e=>{e.currentTarget.style.borderTopColor=C.red;e.currentTarget.style.background=C.bgLight}}
+                      onMouseLeave={e=>{e.currentTarget.style.borderTopColor="transparent";e.currentTarget.style.background=C.bgCard}}
+                    >
+                      <div style={{color:C.red,marginBottom:16}}>{u.icon}</div>
+                      <h4 style={{fontFamily:ff.display,fontSize:18,fontWeight:700,color:C.white,margin:"0 0 6px",letterSpacing:0.5,textTransform:"uppercase"}}>{u.t}</h4>
+                      <p style={{fontFamily:ff.body,fontSize:12,fontWeight:300,color:C.muted,lineHeight:1.65,margin:0}}>{u.d}</p>
+                    </div>
+                  </R>
+                ))}
+              </div>
+            </div>
+          </R>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section style={{background:C.bgCard,borderTop:`1px solid ${C.border}`,borderBottom:`1px solid ${C.border}`}}>
+        <div style={{maxWidth:1200,margin:"0 auto",padding:"72px 40px",display:"flex",alignItems:"center",justifyContent:"space-between",gap:48,flexWrap:"wrap"}}>
+          <R style={{flex:1,minWidth:280}}>
+            <h2 style={{fontFamily:ff.display,fontSize:36,fontWeight:700,color:C.white,letterSpacing:1,textTransform:"uppercase",margin:"0 0 8px"}}>
+              Termin <span style={{color:C.red}}>vereinbaren.</span>
+            </h2>
+            <p style={{fontFamily:ff.body,fontSize:14,fontWeight:300,color:C.muted,margin:0}}>Online buchen oder direkt anrufen — wir sind für Sie da.</p>
+          </R>
+          <R delay={0.15}>
+            <div style={{display:"flex",gap:14}}>
+              <a href={BOOKING} target="_blank" rel="noopener noreferrer" style={{display:"inline-flex",alignItems:"center",gap:10,background:C.red,color:C.white,padding:"16px 32px",fontFamily:ff.body,fontSize:12,fontWeight:600,letterSpacing:1.5,textTransform:"uppercase",textDecoration:"none",transition:"all 0.25s",minHeight:52}}
+                onMouseEnter={e=>{e.currentTarget.style.background=C.redBright}}
+                onMouseLeave={e=>{e.currentTarget.style.background=C.red}}
+              >{ic.cal} Online buchen</a>
+              <a href={`tel:${PHONE}`} style={{display:"inline-flex",alignItems:"center",gap:8,background:"none",color:C.cream,border:`1px solid ${C.white}15`,padding:"16px 24px",fontFamily:ff.body,fontSize:12,fontWeight:400,letterSpacing:1,textTransform:"uppercase",textDecoration:"none",transition:"all 0.25s",minHeight:52}}
+                onMouseEnter={e=>{e.currentTarget.style.borderColor=C.red}}
+                onMouseLeave={e=>{e.currentTarget.style.borderColor=`${C.white}15`}}
+              >{ic.phone} Anrufen</a>
+            </div>
+          </R>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+/* ═══ LEISTUNGEN ═══ */
+function Leistungen(){
+  const[open,setOpen]=useState(0);
+  const items=[
+    {t:"Reifenservice",sub:"Montage · Wechsel · Entsorgung",d:"Professioneller Reifenwechsel, Neumontage und fachgerechte Altreifenentsorgung. Wir beraten Sie auch gerne bei der Wahl der richtigen Reifen für Ihr Fahrzeug und die Saison."},
+    {t:"Räder wuchten",sub:"Präzision · Balance · Sicherheit",d:"Unwuchten verursachen Vibrationen und erhöhen den Verschleiß. Mit moderner Wuchttechnik sorgen wir für eine optimale Balance Ihrer Räder — für ein ruhiges und sicheres Fahrverhalten."},
+    {t:"Ölwechsel",sub:"Motor · Getriebeöl · Filter",d:"Regelmäßiger Ölwechsel schützt Ihren Motor und verlängert seine Lebensdauer. Wir verwenden ausschließlich hochwertige Markenöle und wechseln auf Wunsch auch den Ölfilter."},
+    {t:"Fahrzeugaufbereitung",sub:"Innen · Außen · Versiegelung",d:"Ob Innenreinigung, Politur oder Lackversiegelung — wir bringen Ihr Fahrzeug in Bestform. Professionelle Aufbereitung für einen gepflegten Auftritt."},
+    {t:"Hol & Bringservice",sub:"Komfort · Flexibel · Kostenlos",d:"Sie haben keine Zeit? Kein Problem. Wir holen Ihr Fahrzeug bei Ihnen ab und bringen es nach dem Service zurück. Bequem und stressfrei."},
+    {t:"Ersatzteile & Shop",sub:"Teile · Zubehör · Bestellung",d:"Ersatzteile und Zubehör für Ihr Fahrzeug. Wir beschaffen auch Spezialteile auf Bestellung — schnell und zum fairen Preis."},
+  ];
+  return(
+    <div>
+      <PhotoSection src={IMG.service} alt="Werkstatt" height={380} position="center"
+        overlay={`linear-gradient(0deg, ${C.bg}F0 0%, ${C.bg}80 60%, ${C.bg}40 100%)`}>
+        <div style={{maxWidth:1200,margin:"0 auto",padding:"0 40px 48px",width:"100%",boxSizing:"border-box"}}>
+          <R>
+            <div style={{fontFamily:ff.body,fontSize:11,fontWeight:500,letterSpacing:5,textTransform:"uppercase",color:C.red,marginBottom:16,display:"flex",alignItems:"center",gap:14}}>
+              <span style={{width:28,height:1.5,background:C.red,display:"inline-block"}}/>Leistungen
+            </div>
+            <h2 style={{fontFamily:ff.display,fontSize:52,fontWeight:700,color:C.white,letterSpacing:2,textTransform:"uppercase",margin:0}}>
+              Was wir <span style={{color:C.red}}>machen.</span>
+            </h2>
+          </R>
+        </div>
+      </PhotoSection>
+      <section style={{background:C.bg,position:"relative"}}>
+        <div style={grain}/>
+        <div style={{maxWidth:1200,margin:"0 auto",padding:"80px 40px 120px"}}>
+          {items.map((s,i)=>(
+            <R key={i} delay={i*0.04}>
+              <div onClick={()=>setOpen(open===i?-1:i)} style={{borderTop:`1px solid ${C.border}`,padding:"32px 0",cursor:"pointer"}}>
+                <div style={{display:"flex",alignItems:"center",gap:32}}>
+                  <span style={{fontFamily:ff.display,fontSize:16,color:open===i?C.red:`${C.muted}40`,fontWeight:700,width:36,letterSpacing:1,transition:"color 0.3s"}}>{String(i+1).padStart(2,"0")}</span>
+                  <h3 style={{flex:1,fontFamily:ff.display,fontSize:open===i?36:26,fontWeight:700,color:C.white,transition:"all 0.4s cubic-bezier(0.16,1,0.3,1)",margin:0,letterSpacing:1,textTransform:"uppercase"}}>{s.t}</h3>
+                  <div style={{fontFamily:ff.body,fontSize:10,fontWeight:500,color:open===i?C.red:C.muted,letterSpacing:2,textTransform:"uppercase",transition:"color 0.3s"}}>{s.sub}</div>
+                </div>
+                <div style={{overflow:"hidden",maxHeight:open===i?180:0,opacity:open===i?1:0,transition:"all 0.5s cubic-bezier(0.16,1,0.3,1)",marginLeft:68}}>
+                  <p style={{fontFamily:ff.body,fontSize:15,fontWeight:300,color:C.muted,lineHeight:1.9,maxWidth:600,margin:"16px 0 0"}}>{s.d}</p>
+                </div>
+              </div>
+            </R>
+          ))}
+          <div style={{borderTop:`1px solid ${C.border}`}}/>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+/* ═══ ÜBER UNS ═══ */
+function Ueber(){
+  return(
+    <div>
+      <PhotoSection src={IMG.road} alt="Straße" height={380} position="center 70%"
+        overlay={`linear-gradient(0deg, ${C.bg}F0 0%, ${C.bg}80 60%, ${C.bg}40 100%)`}>
+        <div style={{maxWidth:1200,margin:"0 auto",padding:"0 40px 48px",width:"100%",boxSizing:"border-box"}}>
+          <R>
+            <div style={{fontFamily:ff.body,fontSize:11,fontWeight:500,letterSpacing:5,textTransform:"uppercase",color:C.red,marginBottom:16,display:"flex",alignItems:"center",gap:14}}>
+              <span style={{width:28,height:1.5,background:C.red,display:"inline-block"}}/>Über Uns
+            </div>
+            <h2 style={{fontFamily:ff.display,fontSize:52,fontWeight:700,color:C.white,letterSpacing:2,textTransform:"uppercase",margin:0}}>
+              Steven <span style={{color:C.red}}>Dankovic.</span>
+            </h2>
+          </R>
+        </div>
+      </PhotoSection>
+      <section style={{background:C.bg,position:"relative"}}>
+        <div style={grain}/>
+        <div style={{maxWidth:1200,margin:"0 auto",padding:"80px 40px 120px"}}>
+          <div style={{display:"grid",gridTemplateColumns:"1.2fr 1fr",gap:80,alignItems:"start"}}>
+            <R>
+              <div>
+                <p style={{fontFamily:ff.body,fontSize:17,fontWeight:300,color:C.cream,lineHeight:1.9,margin:"0 0 24px"}}>
+                  Willkommen bei Reifen & Teileservice Dankovic. Mit über 15 Jahren Erfahrung im Fahrzeugservice stehe ich für fachgerechte Arbeit, hochwertige Produkte und eine zuverlässige Betreuung.
+                </p>
+                <p style={{fontFamily:ff.body,fontSize:15,fontWeight:300,color:C.muted,lineHeight:1.9,margin:"0 0 24px"}}>
+                  Ob Reifenservice, Ölwechsel, Fahrzeugaufbereitung oder Ersatzteilbeschaffung — ich biete Ihnen professionelle Lösungen, abgestimmt auf Ihre Bedürfnisse. Transparenz, Termintreue und Sorgfalt bilden die Grundlage meiner täglichen Arbeit.
+                </p>
+                <p style={{fontFamily:ff.body,fontSize:15,fontWeight:300,color:C.muted,lineHeight:1.9,margin:0}}>
+                  Ihr Vertrauen ist mein Antrieb. Ich freue mich, Sie in der Hauptstraße 41 in Bachhagel begrüßen zu dürfen.
+                </p>
+              </div>
+            </R>
+            <R delay={0.15}>
+              <div style={{background:C.bgCard,padding:"48px 40px",borderLeft:`3px solid ${C.red}`}}>
+                <div style={{fontFamily:ff.body,fontSize:10,fontWeight:600,color:C.red,letterSpacing:3,textTransform:"uppercase",marginBottom:28}}>Steven Dankovic · Inhaber</div>
+                {[{l:"Erfahrung",v:"15+ Jahre"},{l:"Standort",v:"Bachhagel"},{l:"Spezialität",v:"Reifenservice & Aufbereitung"},{l:"Service",v:"Hol & Bringservice"},{l:"Buchung",v:"Online via cal.eu"}].map((f,i)=>(
+                  <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"13px 0",borderBottom:`1px solid ${C.border}`}}>
+                    <span style={{fontFamily:ff.body,fontSize:11,fontWeight:500,color:C.muted,textTransform:"uppercase",letterSpacing:1}}>{f.l}</span>
+                    <span style={{fontFamily:ff.body,fontSize:13,fontWeight:500,color:C.white}}>{f.v}</span>
+                  </div>
+                ))}
+              </div>
+            </R>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+/* ═══ KONTAKT ═══ */
+function Kontakt(){
+  return(
+    <section style={{background:C.bg,paddingTop:76,minHeight:"100vh",position:"relative"}}>
+      <div style={grain}/>
+      <div style={{maxWidth:1200,margin:"0 auto",padding:"100px 40px 120px"}}>
+        <R>
+          <div style={{fontFamily:ff.body,fontSize:11,fontWeight:500,letterSpacing:5,textTransform:"uppercase",color:C.red,marginBottom:24,display:"flex",alignItems:"center",gap:14}}>
+            <span style={{width:28,height:1.5,background:C.red,display:"inline-block"}}/>Kontakt
+          </div>
+          <h2 style={{fontFamily:ff.display,fontSize:52,fontWeight:700,color:C.white,letterSpacing:2,textTransform:"uppercase",margin:"0 0 64px"}}>
+            Jetzt <span style={{color:C.red}}>erreichen.</span>
+          </h2>
+        </R>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:2}}>
+          <R>
+            <div style={{background:C.bgCard,padding:"56px 48px"}}>
+              {[
+                {icon:ic.pin,l:"Adresse",v:"Hauptstraße 41\n89429 Bachhagel"},
+                {icon:ic.phone,l:"Telefon",v:"+49 157 35172119"},
+                {icon:ic.mail,l:"E-Mail",v:"SDankovic@outlook.de"},
+              ].map((c,i)=>(
+                <div key={i} style={{display:"flex",gap:20,marginBottom:36}}>
+                  <div style={{color:C.red,marginTop:2}}>{c.icon}</div>
+                  <div>
+                    <div style={{fontFamily:ff.body,fontSize:10,fontWeight:600,color:C.muted,letterSpacing:2,textTransform:"uppercase",marginBottom:6}}>{c.l}</div>
+                    <div style={{fontFamily:ff.body,fontSize:16,color:C.white,fontWeight:500,whiteSpace:"pre-line",lineHeight:1.5}}>{c.v}</div>
+                  </div>
+                </div>
+              ))}
+              <div style={{borderTop:`1px solid ${C.border}`,paddingTop:32,marginTop:12,display:"flex",gap:12}}>
+                <a href={BOOKING} target="_blank" rel="noopener noreferrer" style={{flex:1,display:"flex",alignItems:"center",justifyContent:"center",gap:10,background:C.red,color:C.white,padding:"16px",fontFamily:ff.body,fontSize:12,fontWeight:600,letterSpacing:1.5,textTransform:"uppercase",textDecoration:"none",transition:"all 0.25s",minHeight:52}}
+                  onMouseEnter={e=>{e.currentTarget.style.background=C.redBright}}
+                  onMouseLeave={e=>{e.currentTarget.style.background=C.red}}
+                >{ic.cal} Termin buchen</a>
+                <a href={`tel:${PHONE}`} style={{display:"flex",alignItems:"center",justifyContent:"center",gap:10,background:"none",border:`1px solid ${C.white}15`,color:C.cream,padding:"16px 24px",fontFamily:ff.body,fontSize:12,fontWeight:500,letterSpacing:1.5,textTransform:"uppercase",textDecoration:"none",transition:"all 0.25s",minHeight:52}}
+                  onMouseEnter={e=>{e.currentTarget.style.borderColor=C.red}}
+                  onMouseLeave={e=>{e.currentTarget.style.borderColor=`${C.white}15`}}
+                >{ic.phone} Anrufen</a>
+              </div>
+            </div>
+          </R>
+          <R delay={0.12}>
+            <div style={{background:C.bgLight,padding:"56px 48px",position:"relative",overflow:"hidden"}}>
+              <div style={grain}/>
+              <div style={{position:"relative"}}>
+                <h3 style={{fontFamily:ff.display,fontSize:28,fontWeight:700,color:C.white,margin:"0 0 12px",letterSpacing:1,textTransform:"uppercase"}}>Öffnungszeiten</h3>
+                <p style={{fontFamily:ff.body,fontSize:13,fontWeight:300,color:C.muted,margin:"0 0 32px"}}>Nach Terminvereinbarung</p>
+                <div style={{marginTop:24,padding:"24px",background:C.redSubtle,border:`1px solid ${C.red}20`}}>
+                  <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:12}}>
+                    <div style={{color:C.red}}>{ic.cal}</div>
+                    <span style={{fontFamily:ff.body,fontSize:13,fontWeight:600,color:C.red,textTransform:"uppercase",letterSpacing:1}}>Online-Buchung</span>
+                  </div>
+                  <p style={{fontFamily:ff.body,fontSize:13,fontWeight:300,color:C.muted,lineHeight:1.7,margin:"0 0 16px"}}>
+                    Buchen Sie Ihren Wunschtermin bequem online über unser Buchungssystem — 24/7 verfügbar.
+                  </p>
+                  <a href={BOOKING} target="_blank" rel="noopener noreferrer" style={{display:"flex",alignItems:"center",justifyContent:"center",gap:10,width:"100%",boxSizing:"border-box",background:C.red,color:C.white,padding:"14px",fontFamily:ff.body,fontSize:12,fontWeight:600,letterSpacing:1.5,textTransform:"uppercase",textDecoration:"none",transition:"all 0.25s",minHeight:48}}
+                    onMouseEnter={e=>{e.currentTarget.style.background=C.redBright}}
+                    onMouseLeave={e=>{e.currentTarget.style.background=C.red}}
+                  >Termin buchen</a>
+                </div>
+              </div>
+            </div>
+          </R>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ═══ FOOTER ═══ */
+function Footer({go}){
+  return(
+    <footer style={{background:C.dark,borderTop:`1px solid ${C.border}`}}>
+      <div style={{maxWidth:1200,margin:"0 auto",padding:"56px 40px 28px",display:"grid",gridTemplateColumns:"2fr 1fr 1fr",gap:60}}>
+        <div>
+          <div style={{display:"flex",alignItems:"baseline",gap:8,marginBottom:16}}>
+            <span style={{fontFamily:ff.display,fontSize:22,fontWeight:700,color:C.white,letterSpacing:2,textTransform:"uppercase"}}>Dankovic</span>
+            <span style={{width:5,height:5,borderRadius:"50%",background:C.red,display:"inline-block"}}/>
+          </div>
+          <p style={{fontFamily:ff.body,fontSize:13,fontWeight:300,color:C.muted,lineHeight:1.8,maxWidth:300}}>Reifen & Teileservice Dankovic. Professioneller Fahrzeugservice in Bachhagel.</p>
+        </div>
+        <div>
+          <div style={{fontFamily:ff.body,fontSize:10,fontWeight:600,color:C.muted,letterSpacing:2,textTransform:"uppercase",marginBottom:20}}>Seiten</div>
+          {pages.map(p=><div key={p.id} onClick={()=>go(p.id)} style={{fontFamily:ff.body,fontSize:13,fontWeight:300,color:`${C.white}40`,marginBottom:12,cursor:"pointer",transition:"color 0.2s"}} onMouseEnter={e=>{e.currentTarget.style.color=C.white}} onMouseLeave={e=>{e.currentTarget.style.color=`${C.white}40`}}>{p.l}</div>)}
+        </div>
+        <div>
+          <div style={{fontFamily:ff.body,fontSize:10,fontWeight:600,color:C.muted,letterSpacing:2,textTransform:"uppercase",marginBottom:20}}>Kontakt</div>
+          <div style={{fontFamily:ff.body,fontSize:13,fontWeight:300,color:`${C.white}40`,lineHeight:2.2}}>Hauptstraße 41<br/>89429 Bachhagel<br/>+49 157 35172119</div>
+        </div>
+      </div>
+      <div style={{maxWidth:1200,margin:"0 auto",padding:"20px 40px",borderTop:`1px solid ${C.border}`,display:"flex",justifyContent:"space-between",fontFamily:ff.body,fontSize:11,fontWeight:300,color:`${C.muted}60`}}>
+        <span>© 2026 Reifen & Teileservice Dankovic</span>
+        <span>Konzept — LaneCore AI</span>
+      </div>
+    </footer>
+  );
+}
+
+/* ═══ APP ═══ */
+const App = function App(){
+  const[page,setPage]=useState("home");
+  const go=p=>{setPage(p);window.scrollTo?.({top:0,behavior:"smooth"})};
+  return(
+    <div style={{background:C.bg,minHeight:"100vh"}}>
+      <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Barlow:wght@200;300;400;500;600;700&display=swap" rel="stylesheet"/>
+      <Nav active={page} go={go}/>
+      <main>{page==="home"&&<Home go={go}/>}{page==="leistungen"&&<Leistungen/>}{page==="ueber"&&<Ueber/>}{page==="kontakt"&&<Kontakt/>}</main>
+      <Footer go={go}/>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
