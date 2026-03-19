@@ -62,7 +62,7 @@ const ic = {
 
 const grain={position:"absolute",inset:0,pointerEvents:"none",opacity:0.04,backgroundImage:`url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`};
 
-const pages=[{id:"home",l:"Start"},{id:"leistungen",l:"Leistungen"},{id:"ueber",l:"Über Uns"},{id:"kontakt",l:"Kontakt"}];
+const pages=[{id:"home",l:"Start"},{id:"shop",l:"Reifenshop"},{id:"leistungen",l:"Leistungen"},{id:"ueber",l:"Über Uns"},{id:"kontakt",l:"Kontakt"}];
 
 function PhotoSection({src,alt,height=480,overlay,position="center",children}){
   return(<section style={{position:"relative",height,overflow:"hidden"}}>
@@ -476,6 +476,230 @@ function Kontakt(){
   );
 }
 
+/* ═══ REIFENSHOP ═══ */
+function Shop(){
+  const[cat,setCat]=useState("alle");
+  const[size,setSize]=useState("");
+  const[sort,setSort]=useState("preis-auf");
+
+  const cats=[
+    {id:"alle",l:"Alle Reifen",count:18},
+    {id:"sommer",l:"Sommerreifen",count:6},
+    {id:"winter",l:"Winterreifen",count:6},
+    {id:"ganzjahr",l:"Ganzjahresreifen",count:4},
+    {id:"komplett",l:"Kompletträder",count:2},
+  ];
+
+  const products=[
+    {id:1,name:"Continental PremiumContact 7",size:"205/55 R16 91V",cat:"sommer",preis:89,rating:4.8,label:"Bestseller",saison:"Sommer",ef:"B",nass:"A",db:70},
+    {id:2,name:"Michelin Primacy 4+",size:"225/45 R17 94W",cat:"sommer",preis:109,rating:4.9,label:"Premium",saison:"Sommer",ef:"A",nass:"A",db:69},
+    {id:3,name:"Goodyear EfficientGrip 2",size:"195/65 R15 91H",cat:"sommer",preis:72,rating:4.6,label:null,saison:"Sommer",ef:"B",nass:"A",db:68},
+    {id:4,name:"Hankook Ventus S1 evo3",size:"225/40 R18 92Y",cat:"sommer",preis:95,rating:4.7,label:"Sportlich",saison:"Sommer",ef:"B",nass:"A",db:71},
+    {id:5,name:"Bridgestone Turanza T005",size:"205/60 R16 96H",cat:"sommer",preis:84,rating:4.5,label:null,saison:"Sommer",ef:"B",nass:"A",db:71},
+    {id:6,name:"Pirelli Cinturato P7",size:"215/55 R17 94V",cat:"sommer",preis:99,rating:4.7,label:null,saison:"Sommer",ef:"B",nass:"A",db:70},
+    {id:7,name:"Continental WinterContact TS 870",size:"205/55 R16 91H",cat:"winter",preis:94,rating:4.8,label:"Testsieger",saison:"Winter",ef:"B",nass:"A",db:69},
+    {id:8,name:"Michelin Alpin 6",size:"195/65 R15 95T",cat:"winter",preis:86,rating:4.7,label:"Premium",saison:"Winter",ef:"C",nass:"B",db:69},
+    {id:9,name:"Dunlop Winter Sport 5",size:"225/45 R17 94V",cat:"winter",preis:102,rating:4.6,label:null,saison:"Winter",ef:"C",nass:"B",db:70},
+    {id:10,name:"Goodyear UltraGrip Performance+",size:"205/60 R16 96H",cat:"winter",preis:91,rating:4.7,label:null,saison:"Winter",ef:"B",nass:"B",db:70},
+    {id:11,name:"Nokian WR Snowproof P",size:"225/50 R17 98V",cat:"winter",preis:115,rating:4.8,label:"Nordic",saison:"Winter",ef:"C",nass:"A",db:69},
+    {id:12,name:"Pirelli Sottozero 3",size:"215/55 R17 98H",cat:"winter",preis:108,rating:4.5,label:null,saison:"Winter",ef:"C",nass:"B",db:72},
+    {id:13,name:"Michelin CrossClimate 2",size:"205/55 R16 94V",cat:"ganzjahr",preis:105,rating:4.9,label:"Testsieger",saison:"Ganzjahr",ef:"A",nass:"A",db:69},
+    {id:14,name:"Continental AllSeasonContact 2",size:"225/45 R17 94W",cat:"ganzjahr",preis:112,rating:4.8,label:"Bestseller",saison:"Ganzjahr",ef:"B",nass:"A",db:71},
+    {id:15,name:"Goodyear Vector 4Seasons Gen-3",size:"195/65 R15 95V",cat:"ganzjahr",preis:82,rating:4.6,label:null,saison:"Ganzjahr",ef:"B",nass:"B",db:70},
+    {id:16,name:"Hankook Kinergy 4S2",size:"205/60 R16 96V",cat:"ganzjahr",preis:78,rating:4.5,label:"Preis-Tipp",saison:"Ganzjahr",ef:"C",nass:"B",db:72},
+    {id:17,name:"Kompletträder Stahl Winter",size:"205/55 R16 auf 6.5Jx16 ET45",cat:"komplett",preis:449,rating:4.7,label:"Sorglos-Set",saison:"Winter",ef:"B",nass:"B",db:70},
+    {id:18,name:"Kompletträder Alu Sommer",size:"225/45 R17 auf 7.5Jx17 ET35",cat:"komplett",preis:699,rating:4.8,label:"Premium-Set",saison:"Sommer",ef:"A",nass:"A",db:69},
+  ];
+
+  const filtered=products.filter(p=>{
+    if(cat!=="alle"&&p.cat!==cat)return false;
+    if(size.trim()){
+      const q=size.toLowerCase().replace(/\s+/g,"");
+      const ps=p.size.toLowerCase().replace(/\s+/g,"");
+      if(!ps.includes(q))return false;
+    }
+    return true;
+  }).sort((a,b)=>{
+    if(sort==="preis-auf")return a.preis-b.preis;
+    if(sort==="preis-ab")return b.preis-a.preis;
+    if(sort==="bewertung")return b.rating-a.rating;
+    return 0;
+  });
+
+  const saisonColor={Sommer:"#F59E0B",Winter:"#3B82F6",Ganzjahr:"#10B981"};
+
+  const inputStyle={background:C.bgLight,border:`1px solid ${C.border}`,color:C.white,padding:"12px 16px",fontFamily:ff.body,fontSize:14,outline:"none",width:"100%",boxSizing:"border-box",transition:"border-color 0.2s"};
+
+  return(
+    <div>
+      {/* HERO */}
+      <PhotoSection src={IMG.tire} alt="Reifen" height={340} position="center"
+        overlay={`linear-gradient(0deg, ${C.bg}F0 0%, ${C.bg}80 60%, ${C.bg}40 100%)`}>
+        <div style={{maxWidth:1200,margin:"0 auto",padding:"0 40px 48px",width:"100%",boxSizing:"border-box"}}>
+          <R>
+            <div style={{fontFamily:ff.body,fontSize:11,fontWeight:500,letterSpacing:5,textTransform:"uppercase",color:C.red,marginBottom:16,display:"flex",alignItems:"center",gap:14}}>
+              <span style={{width:28,height:1.5,background:C.red,display:"inline-block"}}/>Reifenshop
+            </div>
+            <h2 style={{fontFamily:ff.display,fontSize:52,fontWeight:700,color:C.white,letterSpacing:2,textTransform:"uppercase",margin:0}}>
+              Reifen <span style={{color:C.red}}>bestellen.</span>
+            </h2>
+          </R>
+        </div>
+      </PhotoSection>
+
+      <section style={{background:C.bg,position:"relative"}}>
+        <div style={grain}/>
+        <div style={{maxWidth:1200,margin:"0 auto",padding:"60px 40px 120px"}}>
+
+          {/* SEARCH + FILTER BAR */}
+          <R>
+            <div style={{display:"flex",gap:12,marginBottom:48,flexWrap:"wrap",alignItems:"stretch"}}>
+              <div style={{flex:"1 1 300px",position:"relative"}}>
+                <input value={size} onChange={e=>setSize(e.target.value)} placeholder="Reifengröße suchen — z.B. 205/55 R16"
+                  style={{...inputStyle,paddingLeft:44,height:"100%"}}
+                  onFocus={e=>{e.currentTarget.style.borderColor=C.red}}
+                  onBlur={e=>{e.currentTarget.style.borderColor=C.border}}
+                />
+                <div style={{position:"absolute",left:16,top:"50%",transform:"translateY(-50%)",color:C.muted}}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                </div>
+              </div>
+              <select value={sort} onChange={e=>setSort(e.target.value)}
+                style={{...inputStyle,width:"auto",minWidth:180,cursor:"pointer",appearance:"none",paddingRight:36,backgroundImage:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23777' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`,backgroundRepeat:"no-repeat",backgroundPosition:"right 14px center"}}>
+                <option value="preis-auf">Preis aufsteigend</option>
+                <option value="preis-ab">Preis absteigend</option>
+                <option value="bewertung">Beste Bewertung</option>
+              </select>
+            </div>
+          </R>
+
+          {/* CATEGORIES */}
+          <R delay={0.05}>
+            <div style={{display:"flex",gap:8,marginBottom:48,flexWrap:"wrap"}}>
+              {cats.map(c=>(
+                <button key={c.id} onClick={()=>setCat(c.id)}
+                  style={{background:cat===c.id?C.red:"transparent",color:cat===c.id?C.white:C.muted,border:`1px solid ${cat===c.id?C.red:C.border}`,padding:"10px 20px",fontFamily:ff.body,fontSize:12,fontWeight:cat===c.id?600:400,letterSpacing:0.5,cursor:"pointer",transition:"all 0.25s",display:"flex",alignItems:"center",gap:8,minHeight:44}}
+                  onMouseEnter={e=>{if(cat!==c.id){e.currentTarget.style.borderColor=C.red;e.currentTarget.style.color=C.cream}}}
+                  onMouseLeave={e=>{if(cat!==c.id){e.currentTarget.style.borderColor=C.border;e.currentTarget.style.color=C.muted}}}
+                >
+                  {c.l}
+                  <span style={{background:cat===c.id?`${C.white}20`:C.bgLight,padding:"2px 8px",fontSize:10,fontWeight:600,color:cat===c.id?C.white:C.muted}}>{c.count}</span>
+                </button>
+              ))}
+            </div>
+          </R>
+
+          {/* RESULTS COUNT */}
+          <div style={{fontFamily:ff.body,fontSize:13,fontWeight:300,color:C.muted,marginBottom:24}}>
+            {filtered.length} {filtered.length===1?"Reifen":"Reifen"} gefunden
+            {size&&<span> für „{size}"</span>}
+          </div>
+
+          {/* PRODUCT GRID */}
+          <div style={{display:"grid",gridTemplateColumns:"repeat(3, 1fr)",gap:2}}>
+            {filtered.map((p,i)=>(
+              <R key={p.id} delay={i*0.03}>
+                <div style={{background:C.bgCard,padding:0,transition:"all 0.3s",position:"relative"}}
+                  onMouseEnter={e=>{e.currentTarget.style.background=C.bgLight;e.currentTarget.querySelector('.topline').style.opacity=1}}
+                  onMouseLeave={e=>{e.currentTarget.style.background=C.bgCard;e.currentTarget.querySelector('.topline').style.opacity=0}}
+                >
+                  {/* Top red line on hover */}
+                  <div className="topline" style={{position:"absolute",top:0,left:0,right:0,height:2,background:C.red,opacity:0,transition:"opacity 0.3s"}}/>
+
+                  {/* Labels */}
+                  {p.label&&<div style={{position:"absolute",top:16,right:16,background:C.red,color:C.white,padding:"4px 10px",fontFamily:ff.body,fontSize:9,fontWeight:700,letterSpacing:1.5,textTransform:"uppercase"}}>{p.label}</div>}
+
+                  {/* Tire visual */}
+                  <div style={{height:160,display:"flex",alignItems:"center",justifyContent:"center",background:C.bgLight,position:"relative",overflow:"hidden"}}>
+                    <div style={{width:120,height:120,borderRadius:"50%",border:`10px solid ${C.white}12`,display:"flex",alignItems:"center",justifyContent:"center",position:"relative"}}>
+                      <div style={{width:56,height:56,borderRadius:"50%",border:`3px solid ${C.white}10`,display:"flex",alignItems:"center",justifyContent:"center"}}>
+                        <div style={{width:12,height:12,borderRadius:"50%",background:`${C.white}08`}}/>
+                      </div>
+                      {/* Tread pattern lines */}
+                      {[0,45,90,135,180,225,270,315].map(deg=>(
+                        <div key={deg} style={{position:"absolute",width:2,height:10,background:`${C.white}06`,transform:`rotate(${deg}deg) translateY(-52px)`}}/>
+                      ))}
+                    </div>
+                    {/* Season badge */}
+                    <div style={{position:"absolute",bottom:12,left:16,display:"flex",alignItems:"center",gap:6}}>
+                      <span style={{width:6,height:6,borderRadius:"50%",background:saisonColor[p.saison]||C.muted}}/>
+                      <span style={{fontFamily:ff.body,fontSize:9,fontWeight:600,color:saisonColor[p.saison]||C.muted,letterSpacing:1,textTransform:"uppercase"}}>{p.saison}</span>
+                    </div>
+                  </div>
+
+                  {/* Info */}
+                  <div style={{padding:"24px 24px 28px"}}>
+                    <div style={{fontFamily:ff.body,fontSize:10,fontWeight:500,color:C.muted,letterSpacing:1,marginBottom:8}}>{p.size}</div>
+                    <h3 style={{fontFamily:ff.display,fontSize:17,fontWeight:700,color:C.white,margin:"0 0 12px",letterSpacing:0.3,textTransform:"uppercase",lineHeight:1.3}}>{p.name}</h3>
+
+                    {/* EU Label */}
+                    <div style={{display:"flex",gap:16,marginBottom:16}}>
+                      {[{l:"Effizienz",v:p.ef},{l:"Nässe",v:p.nass},{l:"Dezibel",v:p.db+"dB"}].map((e,j)=>(
+                        <div key={j}>
+                          <div style={{fontFamily:ff.body,fontSize:8,color:C.muted,letterSpacing:1,textTransform:"uppercase",marginBottom:3}}>{e.l}</div>
+                          <div style={{fontFamily:ff.display,fontSize:14,fontWeight:700,color:e.v==="A"?"#22C55E":e.v==="B"?"#EAB308":C.cream,letterSpacing:0.5}}>{e.v}</div>
+                        </div>
+                      ))}
+                      <div>
+                        <div style={{fontFamily:ff.body,fontSize:8,color:C.muted,letterSpacing:1,textTransform:"uppercase",marginBottom:3}}>Bewertung</div>
+                        <div style={{fontFamily:ff.display,fontSize:14,fontWeight:700,color:"#F59E0B",letterSpacing:0.5}}>★ {p.rating}</div>
+                      </div>
+                    </div>
+
+                    {/* Price + CTA */}
+                    <div style={{display:"flex",alignItems:"flex-end",justifyContent:"space-between",borderTop:`1px solid ${C.border}`,paddingTop:16}}>
+                      <div>
+                        <div style={{fontFamily:ff.body,fontSize:9,color:C.muted,letterSpacing:1,textTransform:"uppercase"}}>Ab Preis / Stück</div>
+                        <div style={{fontFamily:ff.display,fontSize:32,fontWeight:700,color:C.white,lineHeight:1,letterSpacing:0.5}}>{p.preis}<span style={{fontSize:14,fontWeight:400,color:C.muted}}>€</span></div>
+                      </div>
+                      <a href={`https://wa.me/4915735172119?text=${encodeURIComponent(`Hallo, ich interessiere mich für: ${p.name} (${p.size}). Bitte um Angebot.`)}`} target="_blank" rel="noopener noreferrer"
+                        style={{display:"flex",alignItems:"center",gap:6,background:C.red,color:C.white,padding:"10px 18px",fontFamily:ff.body,fontSize:11,fontWeight:600,letterSpacing:1,textTransform:"uppercase",textDecoration:"none",transition:"all 0.25s",minHeight:40}}
+                        onMouseEnter={e=>{e.currentTarget.style.background=C.redBright}}
+                        onMouseLeave={e=>{e.currentTarget.style.background=C.red}}
+                      >Anfragen</a>
+                    </div>
+                  </div>
+                </div>
+              </R>
+            ))}
+          </div>
+
+          {/* No results */}
+          {filtered.length===0&&(
+            <div style={{textAlign:"center",padding:"80px 0"}}>
+              <div style={{fontFamily:ff.display,fontSize:28,fontWeight:700,color:C.white,letterSpacing:1,textTransform:"uppercase",marginBottom:12}}>Keine Treffer</div>
+              <p style={{fontFamily:ff.body,fontSize:14,fontWeight:300,color:C.muted}}>Versuchen Sie eine andere Größe oder Kategorie.</p>
+            </div>
+          )}
+
+          {/* Bottom info */}
+          <R>
+            <div style={{marginTop:64,padding:"40px 48px",background:C.bgCard,border:`1px solid ${C.border}`,display:"flex",alignItems:"center",gap:40,flexWrap:"wrap"}}>
+              <div style={{flex:"1 1 300px"}}>
+                <h3 style={{fontFamily:ff.display,fontSize:22,fontWeight:700,color:C.white,letterSpacing:1,textTransform:"uppercase",margin:"0 0 8px"}}>
+                  Ihre Größe nicht <span style={{color:C.red}}>dabei?</span>
+                </h3>
+                <p style={{fontFamily:ff.body,fontSize:13,fontWeight:300,color:C.muted,lineHeight:1.7,margin:0}}>Wir beschaffen jede Reifengröße und -marke. Rufen Sie uns an oder schreiben Sie eine Nachricht — wir erstellen Ihnen ein individuelles Angebot. Montage und Wuchten inklusive.</p>
+              </div>
+              <div style={{display:"flex",gap:12}}>
+                <a href={`tel:${PHONE}`} style={{display:"flex",alignItems:"center",gap:8,background:C.red,color:C.white,padding:"14px 24px",fontFamily:ff.body,fontSize:12,fontWeight:600,letterSpacing:1,textTransform:"uppercase",textDecoration:"none",transition:"all 0.25s",minHeight:48}}
+                  onMouseEnter={e=>{e.currentTarget.style.background=C.redBright}}
+                  onMouseLeave={e=>{e.currentTarget.style.background=C.red}}
+                >{ic.phone} Anrufen</a>
+                <a href={`https://wa.me/4915735172119?text=${encodeURIComponent("Hallo, ich suche Reifen in folgender Größe: ")}`} target="_blank" rel="noopener noreferrer"
+                  style={{display:"flex",alignItems:"center",gap:8,background:"none",border:`1px solid ${C.white}15`,color:C.cream,padding:"14px 24px",fontFamily:ff.body,fontSize:12,fontWeight:500,letterSpacing:1,textTransform:"uppercase",textDecoration:"none",transition:"all 0.25s",minHeight:48}}
+                  onMouseEnter={e=>{e.currentTarget.style.borderColor=C.red}}
+                  onMouseLeave={e=>{e.currentTarget.style.borderColor=`${C.white}15`}}
+                >WhatsApp</a>
+              </div>
+            </div>
+          </R>
+        </div>
+      </section>
+    </div>
+  );
+}
+
 /* ═══ FOOTER ═══ */
 function Footer({go}){
   return(
@@ -513,7 +737,7 @@ const App = function App(){
     <div style={{background:C.bg,minHeight:"100vh"}}>
       <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Barlow:wght@200;300;400;500;600;700&display=swap" rel="stylesheet"/>
       <Nav active={page} go={go}/>
-      <main>{page==="home"&&<Home go={go}/>}{page==="leistungen"&&<Leistungen/>}{page==="ueber"&&<Ueber/>}{page==="kontakt"&&<Kontakt/>}</main>
+      <main>{page==="home"&&<Home go={go}/>}{page==="shop"&&<Shop/>}{page==="leistungen"&&<Leistungen/>}{page==="ueber"&&<Ueber/>}{page==="kontakt"&&<Kontakt/>}</main>
       <Footer go={go}/>
     </div>
   );
