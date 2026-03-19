@@ -18,17 +18,19 @@ img{max-width:100%}
   .grid-3{grid-template-columns:1fr!important}
   .grid-2{grid-template-columns:1fr!important}
   .stats-grid{grid-template-columns:repeat(2,1fr)!important}
-  .flex-col-mobile{flex-direction:column!important}
+  .flex-col-mobile{flex-direction:column!important;align-items:flex-start!important}
   .pad-mobile{padding-left:20px!important;padding-right:20px!important}
   .hero-h1{font-size:42px!important}
   .section-h2{font-size:36px!important}
   .nav-inner{padding:0 16px!important}
   .nav-desktop{display:none!important}
   .burger{display:flex!important}
-  .photo-section{height:280px!important}
+  .photo-section{height:260px!important}
   .service-card{height:300px!important}
   .shop-card-grid{grid-template-columns:1fr 1fr!important}
   .usp-layout{grid-template-columns:1fr!important;gap:40px!important}
+  section[style*="padding: 100px"]{padding-top:60px!important;padding-bottom:60px!important}
+  footer>div{padding-left:20px!important;padding-right:20px!important}
 }
 @media(max-width:480px){
   .grid-4{grid-template-columns:1fr!important}
@@ -169,7 +171,7 @@ function Home({go}){
         <div style={{position:"absolute",top:0,left:"calc(50% + 300px)",width:2,height:"50%",background:`linear-gradient(180deg, transparent, ${C.red}40, ${C.red}15, transparent)`}}/>
 
         <div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",justifyContent:"flex-end"}}>
-          <div style={{maxWidth:1200,margin:"0 auto",padding:"0 40px",width:"100%",boxSizing:"border-box"}}>
+          <div style={{maxWidth:1200,margin:"0 auto",padding:"0 40px",width:"100%",boxSizing:"border-box"}} className="pad-mobile">
             <R delay={0.1}>
               <div style={{fontFamily:ff.body,fontSize:11,fontWeight:500,letterSpacing:5,textTransform:"uppercase",color:C.red,marginBottom:24,display:"flex",alignItems:"center",gap:14}}>
                 <span style={{width:40,height:1.5,background:C.red,display:"inline-block"}}/>
@@ -187,7 +189,7 @@ function Home({go}){
               </p>
             </R>
             <R delay={0.55}>
-              <div style={{display:"flex",gap:14,margin:"36px 0 0",flexWrap:"wrap"}}>
+              <div style={{display:"flex",gap:14,margin:"36px 0 0",flexWrap:"wrap",width:"100%"}}>
                 <a href={BOOKING} target="_blank" rel="noopener noreferrer" style={{display:"inline-flex",alignItems:"center",gap:10,background:C.red,color:C.white,border:"none",padding:"16px 36px",fontFamily:ff.body,fontSize:12,fontWeight:600,letterSpacing:1.5,textTransform:"uppercase",textDecoration:"none",cursor:"pointer",transition:"all 0.3s",minHeight:52}}
                   onMouseEnter={e=>{e.currentTarget.style.background=C.redBright;e.currentTarget.style.transform="translateY(-2px)";e.currentTarget.style.boxShadow=`0 12px 40px ${C.redGlow}`}}
                   onMouseLeave={e=>{e.currentTarget.style.background=C.red;e.currentTarget.style.transform="none";e.currentTarget.style.boxShadow="none"}}
@@ -334,7 +336,7 @@ function Home({go}){
             <p style={{fontFamily:ff.body,fontSize:14,fontWeight:300,color:C.muted,margin:0}}>Online buchen oder direkt anrufen — wir sind für Sie da.</p>
           </R>
           <R delay={0.15}>
-            <div style={{display:"flex",gap:14}}>
+            <div style={{display:"flex",gap:14,flexWrap:"wrap"}}>
               <a href={BOOKING} target="_blank" rel="noopener noreferrer" style={{display:"inline-flex",alignItems:"center",gap:10,background:C.red,color:C.white,padding:"16px 32px",fontFamily:ff.body,fontSize:12,fontWeight:600,letterSpacing:1.5,textTransform:"uppercase",textDecoration:"none",transition:"all 0.25s",minHeight:52}}
                 onMouseEnter={e=>{e.currentTarget.style.background=C.redBright}}
                 onMouseLeave={e=>{e.currentTarget.style.background=C.red}}
@@ -366,7 +368,7 @@ function Leistungen(){
     <div>
       <PhotoSection className="photo-section" src={IMG.service} alt="Werkstatt" height={380} position="center"
         overlay={`linear-gradient(0deg, ${C.bg}F0 0%, ${C.bg}80 60%, ${C.bg}40 100%)`}>
-        <div style={{maxWidth:1200,margin:"0 auto",padding:"0 40px 48px",width:"100%",boxSizing:"border-box"}}>
+        <div style={{maxWidth:1200,margin:"0 auto",padding:"0 40px 48px",width:"100%",boxSizing:"border-box"}} className="pad-mobile">
           <R>
             <div style={{fontFamily:ff.body,fontSize:11,fontWeight:500,letterSpacing:5,textTransform:"uppercase",color:C.red,marginBottom:16,display:"flex",alignItems:"center",gap:14}}>
               <span style={{width:28,height:1.5,background:C.red,display:"inline-block"}}/>Leistungen
@@ -407,7 +409,7 @@ function Ueber(){
     <div>
       <PhotoSection className="photo-section" src={IMG.road} alt="Straße" height={380} position="center 70%"
         overlay={`linear-gradient(0deg, ${C.bg}F0 0%, ${C.bg}80 60%, ${C.bg}40 100%)`}>
-        <div style={{maxWidth:1200,margin:"0 auto",padding:"0 40px 48px",width:"100%",boxSizing:"border-box"}}>
+        <div style={{maxWidth:1200,margin:"0 auto",padding:"0 40px 48px",width:"100%",boxSizing:"border-box"}} className="pad-mobile">
           <R>
             <div style={{fontFamily:ff.body,fontSize:11,fontWeight:500,letterSpacing:5,textTransform:"uppercase",color:C.red,marginBottom:16,display:"flex",alignItems:"center",gap:14}}>
               <span style={{width:28,height:1.5,background:C.red,display:"inline-block"}}/>Über Uns
@@ -483,7 +485,7 @@ function Kontakt(){
                   </div>
                 </div>
               ))}
-              <div style={{borderTop:`1px solid ${C.border}`,paddingTop:32,marginTop:12,display:"flex",gap:12}}>
+              <div style={{borderTop:`1px solid ${C.border}`,paddingTop:32,marginTop:12,display:"flex",gap:12,flexWrap:"wrap"}}>
                 <a href={BOOKING} target="_blank" rel="noopener noreferrer" style={{flex:1,display:"flex",alignItems:"center",justifyContent:"center",gap:10,background:C.red,color:C.white,padding:"16px",fontFamily:ff.body,fontSize:12,fontWeight:600,letterSpacing:1.5,textTransform:"uppercase",textDecoration:"none",transition:"all 0.25s",minHeight:52}}
                   onMouseEnter={e=>{e.currentTarget.style.background=C.redBright}}
                   onMouseLeave={e=>{e.currentTarget.style.background=C.red}}
@@ -582,7 +584,7 @@ function Shop(){
       {/* HERO */}
       <PhotoSection className="photo-section" src={IMG.tire} alt="Reifen" height={340} position="center"
         overlay={`linear-gradient(0deg, ${C.bg}F0 0%, ${C.bg}80 60%, ${C.bg}40 100%)`}>
-        <div style={{maxWidth:1200,margin:"0 auto",padding:"0 40px 48px",width:"100%",boxSizing:"border-box"}}>
+        <div style={{maxWidth:1200,margin:"0 auto",padding:"0 40px 48px",width:"100%",boxSizing:"border-box"}} className="pad-mobile">
           <R>
             <div style={{fontFamily:ff.body,fontSize:11,fontWeight:500,letterSpacing:5,textTransform:"uppercase",color:C.red,marginBottom:16,display:"flex",alignItems:"center",gap:14}}>
               <span style={{width:28,height:1.5,background:C.red,display:"inline-block"}}/>Reifenshop
@@ -763,7 +765,7 @@ function Footer({go}){
           <div style={{fontFamily:ff.body,fontSize:13,fontWeight:300,color:`${C.white}40`,lineHeight:2.2}}>Hauptstraße 41<br/>89429 Bachhagel<br/>+49 157 35172119</div>
         </div>
       </div>
-      <div style={{maxWidth:1200,margin:"0 auto",padding:"20px 40px",borderTop:`1px solid ${C.border}`,display:"flex",justifyContent:"space-between",fontFamily:ff.body,fontSize:11,fontWeight:300,color:`${C.muted}60`}}>
+      <div style={{maxWidth:1200,margin:"0 auto",padding:"20px 40px",borderTop:`1px solid ${C.border}`,display:"flex",justifyContent:"space-between",flexWrap:"wrap",gap:8,fontFamily:ff.body,fontSize:11,fontWeight:300,color:`${C.muted}60`}}>
         <span>© 2026 Reifen & Teileservice Dankovic</span>
         <span>Konzept — LaneCore AI</span>
       </div>
