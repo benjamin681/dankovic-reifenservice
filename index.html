@@ -12,6 +12,22 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#0A0A0A;overflow-x:hidden}
 img{max-width:100%}
+/* Premium animations */
+@keyframes fadeInUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeInScale{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.6}}
+@keyframes slideInLeft{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes heroGlow{0%,100%{box-shadow:0 0 60px rgba(220,38,38,0.08)}50%{box-shadow:0 0 120px rgba(220,38,38,0.15)}}
+.hero-cta{animation:heroGlow 4s ease-in-out infinite}
+.service-card:hover .service-img{transform:scale(1.08)!important;filter:brightness(1.1)!important}
+.service-card:hover .service-line{width:100%!important;opacity:1!important}
+.service-card:hover{transform:translateY(-4px)!important}
+.shop-product:hover{transform:translateY(-6px)!important;box-shadow:0 20px 60px rgba(0,0,0,0.4)!important}
+.shop-product:hover .tire-img{transform:scale(1.08) rotate(-3deg)!important}
+/* Smooth scroll */
+html{scroll-behavior:smooth}
+/* Mobile */
 @media(max-width:768px){
   .hide-mobile{display:none!important}
   .grid-4{grid-template-columns:1fr 1fr!important}
@@ -20,22 +36,24 @@ img{max-width:100%}
   .stats-grid{grid-template-columns:repeat(2,1fr)!important}
   .flex-col-mobile{flex-direction:column!important;align-items:flex-start!important}
   .pad-mobile{padding-left:20px!important;padding-right:20px!important}
-  .hero-h1{font-size:42px!important}
-  .section-h2{font-size:36px!important}
   .nav-inner{padding:0 16px!important}
   .nav-desktop{display:none!important}
   .burger{display:flex!important}
   .photo-section{height:260px!important}
-  .service-card{height:300px!important}
   .shop-card-grid{grid-template-columns:1fr 1fr!important}
   .usp-layout{grid-template-columns:1fr!important;gap:40px!important}
-  section[style*="padding: 100px"]{padding-top:60px!important;padding-bottom:60px!important}
+  .hero-title{font-size:40px!important}
+  .section-title{font-size:32px!important}
   footer>div{padding-left:20px!important;padding-right:20px!important}
 }
 @media(max-width:480px){
   .grid-4{grid-template-columns:1fr!important}
   .shop-card-grid{grid-template-columns:1fr!important}
-  .stats-grid{grid-template-columns:repeat(2,1fr)!important}
+  .hero-title{font-size:32px!important}
+}
+/* Accessibility */
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:0.01ms!important;transition-duration:0.01ms!important}
 }
 </style>
 </head>
@@ -74,7 +92,22 @@ const PHONE = "+4915735172119";
 const BOOKING = "https://www.cal.eu/reifen-teileservice-dankovic";
 
 function useReveal(t=0.1){const r=useRef(null);const[v,s]=useState(false);useEffect(()=>{const el=r.current;if(!el)return;const o=new IntersectionObserver(([e])=>{if(e.isIntersecting){s(true);o.unobserve(el)}},{threshold:t});o.observe(el);return()=>o.disconnect()},[t]);return[r,v]}
-function R({children,delay=0,y=30,style={}}){const[r,v]=useReveal();return<div ref={r}style={{...style,opacity:v?1:0,transform:v?"none":`translateY(${y}px)`,transition:`opacity 0.8s cubic-bezier(0.16,1,0.3,1) ${delay}s, transform 0.8s cubic-bezier(0.16,1,0.3,1) ${delay}s`}}>{children}</div>}
+function R({children,delay=0,y=30,style={}}){const[r,v]=useReveal();return<div ref={r}style={{...style,opacity:v?1:0,transform:v?"none":`translateY(${y}px)`,transition:`opacity 0.9s cubic-bezier(0.16,1,0.3,1) ${delay}s, transform 0.9s cubic-bezier(0.16,1,0.3,1) ${delay}s`}}>{children}</div>}
+
+/* Animated counter */
+function Counter({end,suffix="",duration=2000}){
+  const[count,setCount]=useState(0);
+  const[ref,visible]=useReveal(0.3);
+  useEffect(()=>{
+    if(!visible)return;
+    const num=parseInt(end.toString().replace(/[^0-9]/g,""))||0;
+    if(num===0){setCount(end);return}
+    let start=0;const step=Math.ceil(num/60);
+    const timer=setInterval(()=>{start+=step;if(start>=num){setCount(num);clearInterval(timer)}else{setCount(start)}},duration/60);
+    return()=>clearInterval(timer);
+  },[visible,end,duration]);
+  return<span ref={ref}>{typeof end==="number"||!isNaN(parseInt(end))?count.toLocaleString("de-DE"):end}{suffix}</span>;
+}
 
 const I=(d,o={})=><svg width={o.s||20} height={o.s||20} viewBox="0 0 24 24" fill={o.f||"none"} stroke={o.c||"currentColor"} strokeWidth={o.w||1.5} strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0}}>{d}</svg>;
 const ic = {
@@ -175,7 +208,7 @@ function Home({go}){
               </div>
             </R>
             <R delay={0.2}>
-              <h1 style={{fontFamily:ff.display,fontSize:"clamp(36px, 7vw, 96px)",fontWeight:700,color:C.white,lineHeight:0.95,letterSpacing:2,textTransform:"uppercase",margin:"0 0 0",maxWidth:800}}>
+              <h1 className="hero-title" style={{fontFamily:ff.display,fontSize:"clamp(36px, 7vw, 96px)",fontWeight:700,color:C.white,lineHeight:0.95,letterSpacing:2,textTransform:"uppercase",margin:"0 0 0",maxWidth:800}}>
                 Reifen &<br/>Teileservice<br/><span style={{color:C.red}}>Dankovic.</span>
               </h1>
             </R>
@@ -186,7 +219,7 @@ function Home({go}){
             </R>
             <R delay={0.55}>
               <div style={{display:"flex",gap:14,margin:"36px 0 0",flexWrap:"wrap",width:"100%"}}>
-                <a href={BOOKING} target="_blank" rel="noopener noreferrer" style={{display:"inline-flex",alignItems:"center",gap:10,background:C.red,color:C.white,border:"none",padding:"16px 36px",fontFamily:ff.body,fontSize:12,fontWeight:600,letterSpacing:1.5,textTransform:"uppercase",textDecoration:"none",cursor:"pointer",transition:"all 0.3s",minHeight:52}}
+                <a href={BOOKING} target="_blank" rel="noopener noreferrer" className="hero-cta" style={{display:"inline-flex",alignItems:"center",gap:10,background:C.red,color:C.white,border:"none",padding:"16px 36px",fontFamily:ff.body,fontSize:12,fontWeight:600,letterSpacing:1.5,textTransform:"uppercase",textDecoration:"none",cursor:"pointer",transition:"all 0.3s",minHeight:52}}
                   onMouseEnter={e=>{e.currentTarget.style.background=C.redBright;e.currentTarget.style.transform="translateY(-2px)";e.currentTarget.style.boxShadow=`0 12px 40px ${C.redGlow}`}}
                   onMouseLeave={e=>{e.currentTarget.style.background=C.red;e.currentTarget.style.transform="none";e.currentTarget.style.boxShadow="none"}}
                 >{ic.cal} Termin buchen</a>
@@ -202,14 +235,16 @@ function Home({go}){
           <div style={{marginTop:48,borderTop:`1px solid ${C.white}10`,background:`${C.bg}80`,backdropFilter:"blur(16px)"}}>
             <div style={{maxWidth:1200,margin:"0 auto",padding:"0 40px",display:"grid",gridTemplateColumns:"repeat(4, 1fr)"}} className="stats-grid pad-mobile">
               {[
-                {v:"15+",l:"Jahre Erfahrung"},
-                {v:"300+",l:"Stammkunden"},
-                {v:"1.500",l:"Fahrzeuge / Jahr"},
-                {v:"✓",l:"Hol & Bringservice"},
+                {v:15,s:"+",l:"Jahre Erfahrung"},
+                {v:300,s:"+",l:"Stammkunden"},
+                {v:1500,s:"",l:"Fahrzeuge / Jahr"},
+                {v:"✓",s:"",l:"Hol & Bringservice"},
               ].map((s,i)=>(
                 <R key={i} delay={0.65+i*0.06}>
                   <div style={{padding:"20px 0",textAlign:"center",borderRight:i<3?`1px solid ${C.white}08`:"none"}}>
-                    <div style={{fontFamily:ff.display,fontSize:28,fontWeight:700,color:C.white,lineHeight:1,letterSpacing:1}}>{s.v}</div>
+                    <div style={{fontFamily:ff.display,fontSize:28,fontWeight:700,color:C.white,lineHeight:1,letterSpacing:1}}>
+                      {typeof s.v==="number"?<><Counter end={s.v}/>{s.s}</>:s.v}
+                    </div>
                     <div style={{fontFamily:ff.body,fontSize:10,fontWeight:500,color:C.muted,letterSpacing:2,textTransform:"uppercase",marginTop:5}}>{s.l}</div>
                   </div>
                 </R>
@@ -226,25 +261,21 @@ function Home({go}){
           <R>
             <div style={{textAlign:"center",marginBottom:72}}>
               <div style={{fontFamily:ff.body,fontSize:11,fontWeight:500,letterSpacing:5,textTransform:"uppercase",color:C.red,marginBottom:16}}>Unsere Leistungen</div>
-              <h2 style={{fontFamily:ff.display,fontSize:52,fontWeight:700,color:C.white,lineHeight:1.05,letterSpacing:2,textTransform:"uppercase",margin:0}}>
+              <h2 className="section-title" style={{fontFamily:ff.display,fontSize:52,fontWeight:700,color:C.white,lineHeight:1.05,letterSpacing:2,textTransform:"uppercase",margin:0}}>
                 Alles aus einer Hand.
               </h2>
             </div>
           </R>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(4, 1fr)",gap:2}} className="grid-2">
+          <div style={{display:"grid",gridTemplateColumns:"repeat(4, 1fr)",gap:3}} className="grid-2">
             {services.map((s,i)=>(
               <R key={i} delay={i*0.08}>
-                <div style={{position:"relative",height:400,overflow:"hidden",cursor:"default",background:C.bgCard}}
-                  onMouseEnter={e=>{e.currentTarget.querySelector('.ov').style.opacity="0.5";e.currentTarget.querySelector('.ct').style.transform="translateY(0)";e.currentTarget.querySelector('img').style.transform="scale(1.05)"}}
-                  onMouseLeave={e=>{e.currentTarget.querySelector('.ov').style.opacity="0.75";e.currentTarget.querySelector('.ct').style.transform="translateY(8px)";e.currentTarget.querySelector('img').style.transform="scale(1)"}}
+                <div className="service-card" style={{position:"relative",height:400,overflow:"hidden",cursor:"default",background:C.bgCard,transition:"transform 0.4s cubic-bezier(0.16,1,0.3,1)"}}>
                 >
-                  <img src={s.img} alt={s.t} loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover",display:"block",transition:"transform 0.6s ease"}}/>
+                  <img className="service-img" src={s.img} alt={s.t} loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover",display:"block",transition:"transform 0.6s ease, filter 0.6s ease"}}/>
                   <div className="ov" style={{position:"absolute",inset:0,background:`linear-gradient(0deg, ${C.bg} 0%, ${C.bg}90 40%, transparent 100%)`,opacity:0.75,transition:"opacity 0.4s"}}/>
-                  {/* Red top accent */}
-                  <div style={{position:"absolute",top:0,left:0,right:0,height:2,background:C.red,opacity:0}}
-                    ref={el=>{if(el)el.parentElement.addEventListener("mouseenter",()=>el.style.opacity=1);el&&el.parentElement.addEventListener("mouseleave",()=>el.style.opacity=0)}}
-                  />
-                  <div className="ct" style={{position:"absolute",bottom:0,left:0,right:0,padding:"28px 24px",transform:"translateY(8px)",transition:"transform 0.4s ease"}}>
+                  {/* Animated red top line */}
+                  <div className="service-line" style={{position:"absolute",top:0,left:0,width:0,height:3,background:`linear-gradient(90deg, ${C.red}, ${C.redBright})`,opacity:0,transition:"width 0.5s ease, opacity 0.3s"}}/>
+                  <div className="ct" style={{position:"absolute",bottom:0,left:0,right:0,padding:"28px 24px",transition:"transform 0.4s ease"}}>
                     <div style={{fontFamily:ff.body,fontSize:9,fontWeight:600,color:C.red,letterSpacing:3,textTransform:"uppercase",marginBottom:8}}>{s.s}</div>
                     <h3 style={{fontFamily:ff.display,fontSize:26,fontWeight:700,color:C.white,margin:"0 0 8px",letterSpacing:1,textTransform:"uppercase"}}>{s.t}</h3>
                     <p style={{fontFamily:ff.body,fontSize:12,fontWeight:300,color:C.muted,lineHeight:1.7,margin:0}}>{s.d}</p>
@@ -644,9 +675,8 @@ function Shop(){
           <div style={{display:"grid",gridTemplateColumns:"repeat(3, 1fr)",gap:2}} className="shop-card-grid">
             {filtered.map((p,i)=>(
               <R key={p.id} delay={i*0.03}>
-                <div style={{background:C.bgCard,padding:0,transition:"all 0.3s",position:"relative"}}
-                  onMouseEnter={e=>{e.currentTarget.style.background=C.bgLight;e.currentTarget.querySelector('.topline').style.opacity=1}}
-                  onMouseLeave={e=>{e.currentTarget.style.background=C.bgCard;e.currentTarget.querySelector('.topline').style.opacity=0}}
+                <div className="shop-product" style={{background:C.bgCard,padding:0,transition:"all 0.4s cubic-bezier(0.16,1,0.3,1)",position:"relative"}}
+
                 >
                   {/* Top red line on hover */}
                   <div className="topline" style={{position:"absolute",top:0,left:0,right:0,height:2,background:C.red,opacity:0,transition:"opacity 0.3s"}}/>
@@ -657,9 +687,7 @@ function Shop(){
                   {/* Tire product image */}
                   <div style={{height:180,display:"flex",alignItems:"center",justifyContent:"center",background:`linear-gradient(135deg, ${C.bgLight} 0%, #0F0F0F 100%)`,position:"relative",overflow:"hidden"}}>
                     <div style={{position:"absolute",inset:0,opacity:0.03,backgroundImage:`repeating-linear-gradient(45deg, ${C.white} 0px, ${C.white} 1px, transparent 1px, transparent 8px)`}}/>
-                    <img src={p.img} alt={p.name} loading="lazy" style={{height:150,width:"auto",objectFit:"contain",filter:"drop-shadow(0 4px 16px rgba(0,0,0,0.6))",transition:"transform 0.4s ease"}}
-                      onMouseEnter={e=>{e.currentTarget.style.transform="scale(1.08) rotate(-3deg)"}}
-                      onMouseLeave={e=>{e.currentTarget.style.transform="none"}}
+                    <img src={p.img} alt={p.name} loading="lazy" style={{className:"tire-img",height:150,width:"auto",objectFit:"contain",filter:"drop-shadow(0 4px 16px rgba(0,0,0,0.6))",transition:"transform 0.4s cubic-bezier(0.16,1,0.3,1)"}}
                     />
                     <div style={{position:"absolute",bottom:12,left:16,display:"flex",alignItems:"center",gap:6,background:`${C.bg}CC`,padding:"4px 10px",backdropFilter:"blur(8px)"}}>
                       <span style={{width:6,height:6,borderRadius:"50%",background:saisonColor[p.saison]||C.muted}}/>
